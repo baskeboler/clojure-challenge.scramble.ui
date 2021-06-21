@@ -2,7 +2,6 @@
   (:require
    [re-frame.core :as re-frame]
    [re-com.core :as re-com :refer [at]]
-   [breaking-point.core :as bp]
    [clojure-challenge.scramble.ui.styles :as styles]
    [clojure-challenge.scramble.ui.config :as config]
    [clojure-challenge.scramble.ui.events :as events]
@@ -13,20 +12,7 @@
 
 ;; home
 
-(defn display-re-pressed-example []
-  (let [re-pressed-example (re-frame/subscribe [::subs/re-pressed-example])]
-    [:div
 
-     [:p
-      [:span "Re-pressed is listening for keydown events. A message will be displayed when you type "]
-      [:strong [:code "hello"]]
-      [:span ". So go ahead, try it out!"]]
-
-     (when-let [rpe @re-pressed-example]
-       [re-com/alert-box
-        :src        (at)
-        :alert-type :info
-        :body       rpe])]))
 
 (defn home-title []
   (let [name (re-frame/subscribe [::subs/name])]
@@ -36,48 +22,58 @@
      :level :level1
      :class (styles/level1)]))
 
-(defn link-to-about-page []
-  [re-com/hyperlink
-   :src      (at)
-   :label    "go to About Page"
-   :on-click #(re-frame/dispatch [::events/navigate :about])])
+
+
+(defn h2-title [label]
+  [re-com/title
+   :src (at)
+   :label label
+   :level :level2
+   :class (styles/level2)])
+
+(defn form-input-string [value-path]
+  [re-com/input-text
+   :src (at)
+   :model (re-frame/subscribe [::subs/get-value value-path])
+   :on-change (fn [v done]
+                (re-frame/dispatch-sync [::events/set-value value-path v])
+                (done))
+   :placeholder "enter a string"])
+
+(defn scramble-form []
+  [re-com/v-box
+   :src (at)
+   :gap "1em"
+   :children [[h2-title "scramble"]
+              [form-input-string [:scramble-form :s1]]
+              [form-input-string [:scramble-form :s2]]
+              [re-com/h-box
+               :gap "2em"
+               :children [[re-com/button
+                           :src (at)
+                           :label "Scramble!"
+                           :disabled? (re-frame/subscribe [::subs/scramble-submit-disabled?])
+                           :on-click (fn [] (re-frame/dispatch [::events/submit-scramble
+                                                                @(re-frame/subscribe [::subs/get-value [:scramble-form :s1]])
+                                                                @(re-frame/subscribe [::subs/get-value [:scramble-form :s2]])]))]
+
+                          (when-let [{:keys [result]} @(re-frame/subscribe [::subs/get-value [:scramble-form :result]])]
+
+                            [re-com/label
+                             :src (at)
+                             :label (if result "OK" "NOPE")])]]]])
+
 
 (defn home-panel []
   [re-com/v-box
    :src      (at)
    :gap      "1em"
    :children [[home-title]
-              [link-to-about-page]
-              [display-re-pressed-example]
-              [:div
-               [:h3 (str "screen-width: " @(re-frame/subscribe [::bp/screen-width]))]
-               [:h3 (str "screen: " @(re-frame/subscribe [::bp/screen]))]]]])
+              [scramble-form]]])
 
 
 (defmethod routes/panels :home-panel [] [home-panel])
 
-;; about
-
-(defn about-title []
-  [re-com/title
-   :src   (at)
-   :label "This is the About Page."
-   :level :level1])
-
-(defn link-to-home-page []
-  [re-com/hyperlink
-   :src      (at)
-   :label    "go to Home Page"
-   :on-click #(re-frame/dispatch [::events/navigate :home])])
-
-(defn about-panel []
-  [re-com/v-box
-   :src      (at)
-   :gap      "1em"
-   :children [[about-title]
-              [link-to-home-page]]])
-
-(defmethod routes/panels :about-panel [] [about-panel])
 
 ;; main
 

@@ -26,3 +26,7 @@
 (defclass level1
   []
   {:color :green})
+
+(defclass level2
+  []
+  {:color :darkgrey})
