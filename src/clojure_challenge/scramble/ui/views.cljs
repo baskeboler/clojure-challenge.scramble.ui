@@ -61,6 +61,7 @@
 
                             [re-com/label
                              :src (at)
+                             :class (if result (styles/success-msg) (styles/error-msg))
                              :label (if result "OK" "NOPE")])]]]])
 
 

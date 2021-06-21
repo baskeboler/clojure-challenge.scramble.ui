@@ -30,3 +30,12 @@
 (defclass level2
   []
   {:color :darkgrey})
+
+(defclass success-msg []
+  {:color :green
+   :font-size "1.5em"})
+
+
+(defclass error-msg []
+  {:color :red
+   :font-size "1.5em"})
