@@ -38,6 +38,7 @@
    :on-change (fn [v done]
                 (re-frame/dispatch-sync [::events/set-value value-path v])
                 (done))
+   :validation-regex #"^[a-z]*$"
    :placeholder "enter a string"])
 
 (defn scramble-form []
@@ -59,18 +60,22 @@
                  :class (styles/form-label)
                  :label "string 2"]
                 [form-input-string [:scramble-form :s2]]]]
-              ;; [form-input-string [:scramble-form :s2]]
               [re-com/h-box
                :gap "2em"
                :children [[re-com/button
                            :src (at)
                            :label "Scramble!"
                            :disabled? (re-frame/subscribe [::subs/scramble-submit-disabled?])
-                           :on-click (fn [] (re-frame/dispatch [::events/submit-scramble
-                                                                @(re-frame/subscribe [::subs/get-value [:scramble-form :s1]])
-                                                                @(re-frame/subscribe [::subs/get-value [:scramble-form :s2]])]))]
+                           :on-click
+                           (fn []
+                             (re-frame/dispatch
+                              [::events/submit-scramble
+                               @(re-frame/subscribe [::subs/get-value [:scramble-form :s1]])
+                               @(re-frame/subscribe [::subs/get-value [:scramble-form :s2]])]))]
 
-                          (when-let [{:keys [result]} @(re-frame/subscribe [::subs/get-value [:scramble-form :result]])]
+                          (when-let [{:keys [result]}
+                                     @(re-frame/subscribe
+                                       [::subs/get-value [:scramble-form :result]])]
 
                             [re-com/label
                              :src (at)
