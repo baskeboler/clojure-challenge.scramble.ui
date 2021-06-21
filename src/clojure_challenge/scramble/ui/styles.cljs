@@ -29,7 +29,7 @@
 
 (defclass level2
   []
-  {:color :darkgrey})
+  {:color :black})
 
 (defclass success-msg []
   {:color      :green
@@ -41,3 +41,8 @@
   {:color      :red
    :align-self :center
    :font-size  "1.5em"})
+
+(defclass form-label []
+  {:color      :black
+   :align-self :center
+   :font-size  "1.1em"})

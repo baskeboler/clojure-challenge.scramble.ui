@@ -24,11 +24,6 @@
   {:db (assoc db :active-panel active-panel)})) ;; escape
 
 
-(re-frame/reg-event-db
- ::set-re-pressed-example
- (fn-traced
-  [db [_ value]]
-  (assoc db :re-pressed-example value)))
 
 (re-frame/reg-event-db
  ::set-value

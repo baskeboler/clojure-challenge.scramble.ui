@@ -18,7 +18,7 @@
   (let [name (re-frame/subscribe [::subs/name])]
     [re-com/title
      :src   (at)
-     :label (str "Hello from " @name ". This is the Home Page." " Git version " config/version)
+     :label (str "Hello from " @name ". Git version " config/version)
      :level :level1
      :class (styles/level1)]))
 
@@ -44,9 +44,22 @@
   [re-com/v-box
    :src (at)
    :gap "1em"
-   :children [[h2-title "scramble"]
-              [form-input-string [:scramble-form :s1]]
-              [form-input-string [:scramble-form :s2]]
+   :children [[h2-title "scramble form"]
+              [re-com/h-box
+               :gap "1em"
+               :children
+               [[re-com/label
+                 :class (styles/form-label)
+                 :label "string 1"]
+                [form-input-string [:scramble-form :s1]]]]
+              [re-com/h-box
+               :gap "1em"
+               :children
+               [[re-com/label
+                 :class (styles/form-label)
+                 :label "string 2"]
+                [form-input-string [:scramble-form :s2]]]]
+              ;; [form-input-string [:scramble-form :s2]]
               [re-com/h-box
                :gap "2em"
                :children [[re-com/button

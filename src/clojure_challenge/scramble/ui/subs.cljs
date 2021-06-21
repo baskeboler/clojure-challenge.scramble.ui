@@ -14,11 +14,6 @@
    (:active-panel db)))
 
 (re-frame/reg-sub
- ::re-pressed-example
- (fn [db _]
-   (:re-pressed-example db)))
-
-(re-frame/reg-sub
  ::get-value
  (fn [db [_ path]]
    (get-in db path)))
