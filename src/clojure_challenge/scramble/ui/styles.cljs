@@ -32,10 +32,12 @@
   {:color :darkgrey})
 
 (defclass success-msg []
-  {:color :green
-   :font-size "1.5em"})
+  {:color      :green
+   :align-self :center
+   :font-size  "1.5em"})
 
 
 (defclass error-msg []
-  {:color :red
-   :font-size "1.5em"})
+  {:color      :red
+   :align-self :center
+   :font-size  "1.5em"})
